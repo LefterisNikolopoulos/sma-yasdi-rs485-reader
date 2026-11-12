@@ -2,7 +2,7 @@
 
 > **100% Standalone Single-File Python Reader for SMA Inverters via RS485 & YASDI**
 
-A standalone, robust Python tool designed for monitoring and logging data from **SMA Solar Inverters** (specifically tested on **SMA Sunny Mini Central SMC 7000TL**) using RS485 serial communication and the official SMA **YASDI** protocol.
+A standalone, robust Python tool designed for monitoring and logging telemetry data from **SMA Solar Inverters** (specifically tested and validated on **SMA Sunny Mini Central SMC 7000TL**) using RS485 serial communication and the official SMA **YASDI** protocol.
 
 ---
 
@@ -11,16 +11,16 @@ A standalone, robust Python tool designed for monitoring and logging data from *
 - **Single-File Zero-Dependency Executable (`read_sma.py`)**:
   - Embedded native ARM64 YASDI shared libraries (`libyasdimaster.so`, `libyasdidrv.so`, `libyasdi.so`).
   - Self-extracts and configures paths automatically on any fresh Raspberry Pi (Raspberry Pi OS 64-bit / Debian aarch64).
-  - No manual compilation, no `cmake`, no external tarballs needed.
+  - No manual compilation, no `cmake`, no external tarballs or internet access required.
 - **Full Channel Telemetry**:
-  - Instant live readout of all channels: `Pac` (Grid Power), `Pdc` (PV Power), `Vdc` (Array Voltage), `Idc` (Array Current), `Vac`, `Iac`, `Fac` (Frequency), `E-Total` (Total Yield), Operating Status / Mode, Error states, etc.
+  - Live readout of all spot channels: `Pac` (Grid Power), `Pdc` (PV Power), `Vdc` (Array Voltage), `Idc` (Array Current), `Vac`, `Iac`, `Fac` (Frequency), `E-Total` (Total Yield), Operating Status / Mode, Error states, etc.
 - **Accurate Daily Yield (`E-Today`)**:
-  - Automatically calculates and updates daily production (`E-Today` in kWh) relative to a local midnight baseline (`sma_daily_baseline.json`).
+  - Automatically calculates and tracks daily production (`E-Today` in kWh) relative to a local midnight baseline (`sma_daily_baseline.json`).
 - **Flexible Logging & Exports**:
-  - Clean formatted console tables for instant inspection.
+  - Clean formatted console tables for instant terminal inspection.
   - **CSV Export** (`sma_data.csv`) for easy spreadsheet and Grafana / InfluxDB ingestion.
   - **JSON Export** (`sma_all_channels.json`) containing complete dumps of all available device channels.
-  - Interactive mode with selectable continuous polling loop.
+  - Interactive mode with optional continuous polling loop.
 
 ---
 
@@ -62,32 +62,32 @@ python3 read_sma.py
 ============================================================================
       SMA RS485 Inverter Reader - Sunny Mini Central (SMC 7000TL)      
 ============================================================================
-[*] Διαθέσιμες θύρες USB: /dev/ttyUSB0
+[*] Available USB ports: /dev/ttyUSB0
 
-[?] Δώσε αριθμό θύρας USB (π.χ. 0 για ttyUSB0, 1 για ttyUSB1) [0]: 0
-[?] Πόσους inverters θες να διαβάσεις; [2]: 2
+[?] Enter USB port number (e.g. 0 for ttyUSB0, 1 for ttyUSB1) [0]: 0
+[?] How many inverters do you want to read? [2]: 2
 
-[*] Θύρα: /dev/ttyUSB0 | Baudrate: 1200 (Μόνιμο) | Στόχος: 2 inverters (SMC 7000TL)
-[*] Φόρτωση YASDI Engine...
-[+] Driver ONLINE στο /dev/ttyUSB0.
-[*] Έναρξη αξιόπιστης αναζήτησης 2 inverters...
-[*] Αναμονή απάντησης: 2/2 βρέθηκαν (17.0s)...
-[✓] Ολοκληρώθηκε η ανίχνευση σε 17.0s.
-[+] Βρέθηκαν και απάντησαν συνολικά: 2 συσκευές.
+[*] Port: /dev/ttyUSB0 | Baudrate: 1200 (Fixed) | Target: 2 inverters (SMC 7000TL)
+[*] Loading YASDI Engine...
+[+] Driver ONLINE on /dev/ttyUSB0.
+[*] Starting detection for 2 inverters...
+[*] Waiting for reply: 2/2 found (17.0s)...
+[✓] Detection completed in 17.0s.
+[+] Total devices found and responding: 2
 
-===================================================
- 📊 ΣΥΝΟΨΗ METΡΗΣΕΩΝ INVERTERS
-===================================================
-+---------+------------+----------+----------+----------+----------+------------+------------+---------------+
-| Inverter| Serial Nr  | Pac (W)  | Vdc (V)  | Idc (A)  | Pdc (W)  | E-Today kWh| E-Total kWh| Κατάσταση     |
-+---------+------------+----------+----------+----------+----------+------------+------------+---------------+
-| #1      | 2110289698 | 2154.0   | 480.2    | 4.6      | 2208.9   | 14.2       | 185420.0   | Mpp           |
-| #2      | 2110289317 | 2110.0   | 475.8    | 4.5      | 2141.1   | 13.9       | 182105.0   | Mpp           |
-+---------+------------+----------+----------+----------+----------+------------+------------+---------------+
-| ΣΥΝΟΛΟ  | 2 Συσκευές | 4264.0 W |          |          |          | 28.1 kWh   |            |               |
-+---------+------------+----------+----------+----------+----------+------------+------------+---------------+
-[+] Τα δεδομένα αποθηκεύτηκαν στο: sma_data.csv
-[+] Όλα τα κανάλια αποθηκεύτηκαν στο: sma_all_channels.json
+==================================================================================================================
+                             SUMMARY TABLE - ALL SMA INVERTERS
+==================================================================================================================
+#   | Serial No    | Type / Name          | Pac (W)  | Pdc (W)  | Vdc (V)  | E-Today (kWh)  | E-Total (kWh)  | Status
+------------------------------------------------------------------------------------------------------------------
+1   | 2110289698   | WR7000TL             | 2154.0   | 2208.9   | 480.2    | 14.20          | 185420.0       | Mpp
+2   | 2110289317   | WR7000TL             | 2110.0   | 2141.1   | 475.8    | 13.90          | 182105.0       | Mpp
+==================================================================================================================
+
+[✓] Key metrics saved to: sma_data.csv
+[✓] ALL channels (full dump) saved to: sma_all_channels.json
+
+[?] Continuously poll at regular intervals? (e.g. type 15 for every 15s, or press Enter to exit): 
 ```
 
 ---

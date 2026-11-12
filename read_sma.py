@@ -55,7 +55,7 @@ def auto_setup_and_extract_libs():
     if os.path.exists("/usr/local/lib/libyasdimaster.so"):
         return "/usr/local/lib"
 
-    print("[*] Νέο σύστημα εντοπίστηκε: Αυτόματη εγκατάσταση βιβλιοθηκών YASDI...")
+    print("[*] Fresh system detected: Auto-installing YASDI libraries...")
 
     target_dir = "/usr/local/lib"
     can_write_root = True
@@ -73,7 +73,7 @@ def auto_setup_and_extract_libs():
             target_dir = os.path.join(os.path.expanduser("~"), ".sma_libs")
             os.makedirs(target_dir, exist_ok=True)
 
-    print(f"[*] Εξαγωγή βιβλιοθηκών στο: {target_dir}")
+    print(f"[*] Extracting libraries to: {target_dir}")
 
     lib_files = {
         'libyasdi.so': 'libyasdi',
@@ -113,7 +113,7 @@ def auto_setup_and_extract_libs():
             except Exception:
                 pass
 
-    print("[✓] Οι βιβλιοθήκες εγκαταστάθηκαν επιτυχώς!")
+    print("[✓] YASDI libraries installed successfully!")
     return target_dir
 
 
@@ -157,9 +157,9 @@ def get_user_inputs():
 
     available_ports = list_available_serial_ports()
     if available_ports:
-        print(f"[*] Διαθέσιμες θύρες USB: {', '.join(available_ports)}")
+        print(f"[*] Available USB ports: {', '.join(available_ports)}")
     else:
-        print("[!] Προσοχή: Δεν εντοπίστηκε ενεργό /dev/ttyUSB* αυτή τη στιγμή.")
+        print("[!] Warning: No active /dev/ttyUSB* device detected at this moment.")
 
     if len(sys.argv) >= 3:
         usb_input = sys.argv[1]
@@ -172,10 +172,10 @@ def get_user_inputs():
         if available_ports:
             default_usb = available_ports[0].replace("/dev/ttyUSB", "")
 
-        usb_prompt = input(f"\n[?] Δώσε αριθμό θύρας USB (π.χ. 0 για ttyUSB0, 1 για ttyUSB1) [{default_usb}]: ").strip()
+        usb_prompt = input(f"\n[?] Enter USB port number (e.g. 0 for ttyUSB0, 1 for ttyUSB1) [{default_usb}]: ").strip()
         usb_input = usb_prompt if usb_prompt else default_usb
 
-        count_prompt = input("[?] Πόσους inverters θες να διαβάσεις; [2]: ").strip()
+        count_prompt = input("[?] How many inverters do you want to read? [2]: ").strip()
         count_input = count_prompt if count_prompt else "2"
 
     if usb_input.startswith("/dev/ttyUSB"):
@@ -342,8 +342,8 @@ def dump_all_channels_for_device(lib, dev_handle, dev_index, chan_type=SPOTCHANN
 
 def print_device_channels_table(dev_data, etoday_calc):
     print("\n" + "=" * 70)
-    print(f" Συσκευή #{dev_data['index']}: {dev_data['type']} '{dev_data['name']}' (SN: {dev_data['sn']})")
-    print(f" Συνολικά κανάλια: {len(dev_data['table_rows'])} | Υπολογισμένο E-Today: {etoday_calc:.2f} kWh")
+    print(f" Device #{dev_data['index']}: {dev_data['type']} '{dev_data['name']}' (SN: {dev_data['sn']})")
+    print(f" Total channels: {len(dev_data['table_rows'])} | Calculated E-Today: {etoday_calc:.2f} kWh")
     print("-" * 70)
     print(f"{'Channel handle':<16} | {'Channel name':<24} | {'Channel value (Unit)'}")
     print("-" * 70)
@@ -384,9 +384,9 @@ def extract_key_metrics(chans, sn):
 
 def print_summary_table(all_devices_data):
     print("\n" + "=" * 114)
-    print("                              ΣΥΝΟΠΤΙΚΟΣ ΠΙΝΑΚΑΣ ΟΛΩΝ ΤΩΝ SMA SMC 7000TL")
+    print("                             SUMMARY TABLE - ALL SMA INVERTERS")
     print("=" * 114)
-    print(f"{'#':<3} | {'Serial No':<12} | {'Τύπος / Όνομα':<20} | {'Pac (W)':<8} | {'Pdc (W)':<8} | {'Vdc (V)':<8} | {'E-Today (kWh)':<14} | {'E-Total (kWh)':<14} | {'Status'}")
+    print(f"{'#':<3} | {'Serial No':<12} | {'Type / Name':<20} | {'Pac (W)':<8} | {'Pdc (W)':<8} | {'Vdc (V)':<8} | {'E-Today (kWh)':<14} | {'E-Total (kWh)':<14} | {'Status'}")
     print("-" * 114)
 
     for d in all_devices_data:
@@ -444,35 +444,35 @@ def save_data(all_devices_data):
     with open(JSON_ALL_CHANNELS_PATH, "w", encoding="utf-8") as f:
         json.dump(json_payload, f, indent=2, ensure_ascii=False)
 
-    print(f"\n[✓] Τα βασικά δεδομένα αποθηκεύτηκαν στο: {CSV_LOG_PATH}")
-    print(f"[✓] ΟΛΑ τα κανάλια (Full Data) αποθηκεύτηκαν στο: {JSON_ALL_CHANNELS_PATH}")
+    print(f"\n[✓] Key metrics saved to: {CSV_LOG_PATH}")
+    print(f"[✓] ALL channels (full dump) saved to: {JSON_ALL_CHANNELS_PATH}")
 
 
 def main():
     port_device, target_count = get_user_inputs()
 
-    print(f"\n[*] Θύρα: {port_device} | Baudrate: {FIXED_BAUDRATE} (Μόνιμο) | Στόχος: {target_count} inverters (SMC 7000TL)")
+    print(f"\n[*] Port: {port_device} | Baudrate: {FIXED_BAUDRATE} (Fixed) | Target: {target_count} inverters (SMC 7000TL)")
     generate_yasdi_conf(port_device)
 
-    print("[*] Φόρτωση YASDI Engine...")
+    print("[*] Loading YASDI Engine...")
     try:
         lib = load_yasdi_library()
     except Exception as e:
-        print(f"[-] Σφάλμα φόρτωσης: {e}")
+        print(f"[-] Loading error: {e}")
         sys.exit(1)
 
     dwBDC = ctypes.c_uint32(0)
     ret = lib.yasdiMasterInitialize(YASDI_CONF_PATH.encode("utf-8"), ctypes.byref(dwBDC))
     if ret < 0 or dwBDC.value == 0:
-        print(f"[-] Αποτυχία εκκίνησης driver για τη θύρα {port_device}.")
-        print("    Ελέγξτε αν η θύρα είναι συνδεδεμένη και αν έχετε δικαιώματα (sudo chmod 777 /dev/ttyUSB0).")
+        print(f"[-] Failed to start driver for port {port_device}.")
+        print("    Check if port is connected and permissions are granted (e.g. sudo chmod 777 /dev/ttyUSB0).")
         sys.exit(1)
 
     try:
         lib.yasdiMasterSetDriverOnline(0)
-        print(f"[+] Driver ONLINE στο {port_device}.")
+        print(f"[+] Driver ONLINE on {port_device}.")
 
-        print(f"[*] Έναρξη αξιόπιστης αναζήτησης {target_count} inverters...")
+        print(f"[*] Starting detection for {target_count} inverters...")
 
         lib.DoStartDeviceDetection(target_count, 0)
 
@@ -484,7 +484,7 @@ def main():
         while time.time() - start_time < max_wait:
             found_count = lib.GetDeviceHandles(handles, 50)
             elapsed = time.time() - start_time
-            print(f"[*] Αναμονή απάντησης: {found_count}/{target_count} βρέθηκαν ({elapsed:.1f}s)...", end="\r")
+            print(f"[*] Waiting for reply: {found_count}/{target_count} found ({elapsed:.1f}s)...", end="\r")
             if found_count >= target_count:
                 break
             time.sleep(0.5)
@@ -494,15 +494,15 @@ def main():
         found_count = lib.GetDeviceHandles(handles, 50)
 
         elapsed = time.time() - start_time
-        print(f"[✓] Ολοκληρώθηκε η ανίχνευση σε {elapsed:.1f}s.")
-        print(f"[+] Βρέθηκαν και απάντησαν συνολικά: {found_count} συσκευές.")
+        print(f"[✓] Detection completed in {elapsed:.1f}s.")
+        print(f"[+] Total devices found and responding: {found_count}")
 
         if found_count == 0:
-            print("\n[-] Δεν απάντησε κανένας SMA SMC 7000TL inverter.")
-            print("    Σημαντικός έλεγχος υλικού για SMC 7000TL:")
-            print("    1. Καλωδίωση κλέμμας 485PB-SMC-NR: Pin 2 = Data+ (A+), Pin 7 = Data- (B-), Pin 5 = GND.")
-            print("    2. Τερματισμός (Jumper A): Πρέπει να είναι ON ΜΟΝΟ στον τελευταίο inverter. Στους άλλους OFF!")
-            print("    3. DC Τάση: Βεβαιώσου ότι τα πάνελ έχουν τάση (αν είναι νύχτα/αργά, οι SMC 7000TL σβήνουν).")
+            print("\n[-] No SMA inverters responded.")
+            print("    Hardware troubleshooting checklist for SMC 7000TL:")
+            print("    1. Terminal wiring (485PB-SMC-NR): Pin 2 = Data+ (A+), Pin 7 = Data- (B-), Pin 5 = GND.")
+            print("    2. Bus Termination (Jumper A): Must be ON ONLY on the last inverter. OFF on all others!")
+            print("    3. DC Voltage: Ensure PV panels have voltage/sunlight (inverters turn off at night).")
             return
 
         def process_and_display():
@@ -521,23 +521,23 @@ def main():
 
         process_and_display()
 
-        print("\n[?] Θέλεις να συνεχίσει να διαβάζει περιοδικά; (π.χ. πληκτρολόγησε 15 για κάθε 15s, ή πάτα Enter για έξοδο): ", end="")
+        print("\n[?] Continuously poll at regular intervals? (e.g. type 15 for every 15s, or press Enter to exit): ", end="")
         sys.stdout.flush()
         user_loop = input().strip()
 
         if user_loop.isdigit() and int(user_loop) > 0:
             interval = int(user_loop)
-            print(f"[*] Εκκίνηση συνεχούς παρακολούθησης κάθε {interval}s (Πάτα Ctrl+C για έξοδο)...")
+            print(f"[*] Starting continuous monitoring every {interval}s (Press Ctrl+C to stop)...")
             while True:
                 time.sleep(interval)
                 process_and_display()
 
     except KeyboardInterrupt:
-        print("\n[*] Διακοπή από τον χρήστη (Ctrl+C).")
+        print("\n[*] Stopped by user (Ctrl+C).")
     finally:
-        print("[*] Τερματισμός επικοινωνίας YASDI (καθαρισμός πόρων)...")
+        print("[*] Shutting down YASDI engine (releasing resources)...")
         lib.yasdiMasterShutdown()
-        print("[✓] Έτοιμο. Καλή συνέχεια!\n")
+        print("[✓] Done. Goodbye!\n")
 
 
 if __name__ == "__main__":
