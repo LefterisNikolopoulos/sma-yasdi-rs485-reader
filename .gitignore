@@ -1,0 +1,27 @@
+# Output & data logs
+*.csv
+*.json
+*.log
+sma_data.csv
+sma_all_channels.json
+sma_daily_baseline.json
+
+# Auto-generated device ini cache
+devices/
+yasdi.conf
+yasdi.ini
+.sma_libs/
+
+# Python cache & virtualenvs
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+
+# Temporary & system files
+*.swp
+*.swo
+*~
+.DS_Store
