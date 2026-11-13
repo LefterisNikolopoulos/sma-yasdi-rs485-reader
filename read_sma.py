@@ -511,14 +511,15 @@ def main():
 
         handles = (ctypes.c_uint32 * 50)()
         start_time = time.time()
-        max_wait = 30  # seconds
+        # Scale detection timeout: 1200 baud is slow on RS485. Allow at least 60s, or ~8s per inverter
+        max_wait = max(60, target_count * 8)
         found_count = 0
 
         while time.time() - start_time < max_wait:
             cnt_api = lib.GetDeviceHandles(handles, 50)
             found_count = max(cnt_api, len(event_detected_handles))
             elapsed = time.time() - start_time
-            print(f"[*] Waiting for reply: {found_count}/{target_count} found ({elapsed:.1f}s)...", end="\r")
+            print(f"[*] Waiting for reply: {found_count}/{target_count} found ({elapsed:.1f}s / {max_wait}s)...", end="\r")
             if found_count >= target_count:
                 break
             time.sleep(0.5)
@@ -547,6 +548,21 @@ def main():
             print("    2. Bus Termination (Jumper A): Must be ON ONLY on the last inverter. OFF on all others!")
             print("    3. DC Voltage: Ensure PV panels have voltage/sunlight (inverters turn off at night).")
             return
+
+        # YASDI State Identification Phase:
+        # After device detection, YASDI requests the channel lists over RS485 for any new device types.
+        # Wait up to 15s for the in-memory channel lists to become available.
+        print("[*] Synchronizing channel definitions over RS485...")
+        for _ in range(15):
+            has_channels = False
+            for h in all_final_handles:
+                chans_test = (ctypes.c_uint32 * 10)()
+                if lib.GetChannelHandlesEx(h, chans_test, 10, SPOTCHANNELS) > 0:
+                    has_channels = True
+                    break
+            if has_channels:
+                break
+            time.sleep(1)
 
         def process_and_display():
             all_devices_data = []
