@@ -78,10 +78,13 @@ def auto_setup_and_extract_libs():
     lib_files = {
         'libyasdi.so': 'libyasdi',
         'libyasdi.so.1': 'libyasdi',
+        'libyasdi.so.1.8.1': 'libyasdi',
         'libyasdimaster.so': 'libyasdimaster',
         'libyasdimaster.so.1': 'libyasdimaster',
+        'libyasdimaster.so.1.8.1': 'libyasdimaster',
         'libyasdi_drv_serial.so': 'libyasdi_drv_serial',
         'libyasdi_drv_serial.so.1': 'libyasdi_drv_serial',
+        'libyasdi_drv_serial.so.1.8.1': 'libyasdi_drv_serial',
     }
 
     decompressed_cache = {}
@@ -101,8 +104,13 @@ def auto_setup_and_extract_libs():
                 f.write(raw)
             subprocess.run(f"sudo mv {tmp_p} /usr/local/lib/ && sudo chmod 755 /usr/local/lib/{filename}", shell=True)
 
+    # Multiarch support for Debian / Ubuntu ARM64
+    multiarch_dir = "/usr/lib/aarch64-linux-gnu"
+    if os.path.isdir(multiarch_dir) and target_dir == "/usr/local/lib":
+        subprocess.run(f"sudo cp -a /usr/local/lib/libyasdi* {multiarch_dir}/ 2>/dev/null || true", shell=True)
+
     if target_dir == "/usr/local/lib":
-        subprocess.run("sudo ldconfig 2>/dev/null || true", shell=True)
+        subprocess.run("sudo ldconfig 2>/dev/null || sudo /sbin/ldconfig 2>/dev/null || ldconfig 2>/dev/null || true", shell=True)
     else:
         # Add local dir to LD_LIBRARY_PATH
         if target_dir not in os.environ.get("LD_LIBRARY_PATH", ""):
