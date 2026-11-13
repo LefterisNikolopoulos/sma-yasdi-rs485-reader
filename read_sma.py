@@ -200,13 +200,23 @@ def get_user_inputs():
 
 
 def generate_yasdi_conf(port_device):
+    if os.path.exists(YASDI_CONF_PATH):
+        try:
+            with open(YASDI_CONF_PATH, "r") as f:
+                cur = f.read()
+            if f"Device={port_device}" in cur:
+                # Keep user's custom settings intact (e.g. Media=RS485)
+                return
+        except Exception:
+            pass
+
     conf_content = f"""[DriverModules]
 Driver0=yasdi_drv_serial
 
 [COM1]
 Device={port_device}
 DeviceFilesPath={DEVICES_DIR}
-Media=RS232
+Media=RS485
 Baudrate={FIXED_BAUDRATE}
 Protocol=SMANet
 """
@@ -247,6 +257,10 @@ def load_yasdi_library():
 
     lib.DoStopDeviceDetection.argtypes = []
     lib.DoStopDeviceDetection.restype = ctypes.c_int
+
+    EVENT_CALLBACK_TYPE = ctypes.CFUNCTYPE(None, ctypes.c_int, DWORD, DWORD)
+    lib.yasdiMasterAddEventListener.argtypes = [EVENT_CALLBACK_TYPE, DWORD]
+    lib.yasdiMasterAddEventListener.restype = ctypes.c_int
 
     lib.GetDeviceHandles.argtypes = [ctypes.POINTER(DWORD), DWORD]
     lib.GetDeviceHandles.restype = DWORD
@@ -480,6 +494,17 @@ def main():
         lib.yasdiMasterSetDriverOnline(0)
         print(f"[+] Driver ONLINE on {port_device}.")
 
+        EVENT_CALLBACK_TYPE = ctypes.CFUNCTYPE(None, ctypes.c_int, ctypes.c_uint32, ctypes.c_uint32)
+        event_detected_handles = []
+
+        def event_callback(event, dev_handle, param1):
+            if event == 0:  # YASDI_EVENT_DEVICE_ADDED
+                if dev_handle not in event_detected_handles:
+                    event_detected_handles.append(dev_handle)
+
+        cb_holder = EVENT_CALLBACK_TYPE(event_callback)
+        lib.yasdiMasterAddEventListener(cb_holder, 0)
+
         print(f"[*] Starting detection for {target_count} inverters...")
 
         lib.DoStartDeviceDetection(target_count, 0)
@@ -490,7 +515,8 @@ def main():
         found_count = 0
 
         while time.time() - start_time < max_wait:
-            found_count = lib.GetDeviceHandles(handles, 50)
+            cnt_api = lib.GetDeviceHandles(handles, 50)
+            found_count = max(cnt_api, len(event_detected_handles))
             elapsed = time.time() - start_time
             print(f"[*] Waiting for reply: {found_count}/{target_count} found ({elapsed:.1f}s)...", end="\r")
             if found_count >= target_count:
@@ -499,8 +525,17 @@ def main():
 
         print()
         lib.DoStopDeviceDetection()
-        found_count = lib.GetDeviceHandles(handles, 50)
+        cnt_api = lib.GetDeviceHandles(handles, 50)
 
+        all_final_handles = []
+        for i in range(cnt_api):
+            if handles[i] not in all_final_handles:
+                all_final_handles.append(handles[i])
+        for h in event_detected_handles:
+            if h not in all_final_handles:
+                all_final_handles.append(h)
+
+        found_count = len(all_final_handles)
         elapsed = time.time() - start_time
         print(f"[✓] Detection completed in {elapsed:.1f}s.")
         print(f"[+] Total devices found and responding: {found_count}")
@@ -515,8 +550,7 @@ def main():
 
         def process_and_display():
             all_devices_data = []
-            for i in range(found_count):
-                h_dev = handles[i]
+            for i, h_dev in enumerate(all_final_handles):
                 dev_data = dump_all_channels_for_device(lib, h_dev, i + 1, chan_type=SPOTCHANNELS)
                 all_devices_data.append(dev_data)
 
