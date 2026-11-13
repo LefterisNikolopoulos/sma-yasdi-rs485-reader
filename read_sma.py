@@ -393,9 +393,13 @@ def extract_key_metrics(chans, sn):
     mode_str, _ = get_val(["Mode", "Status", "OperatingStt"])
     error_str, _ = get_val(["Error", "Fehler"])
 
+    etot_float = 0.0
     try:
-        etot_float = float(etot_str) if etot_str != "N/A" else float(etot_num)
-    except ValueError:
+        if etot_str != "N/A" and etot_str is not None:
+            etot_float = float(etot_str)
+        elif etot_num is not None:
+            etot_float = float(etot_num)
+    except (ValueError, TypeError):
         etot_float = 0.0
 
     etoday_calc = get_or_update_daily_baseline(sn, etot_float)
