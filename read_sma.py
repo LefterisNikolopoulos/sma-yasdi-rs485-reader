@@ -46,6 +46,25 @@ EMBEDDED_ARM64_LIBS = {
 }
 
 
+EMBEDDED_DEVICE_BINS = {
+    "WR7KTL11.bin": "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",
+    "WR10TL08.bin": "eNqNmMtv28gdx3+yFcd2nPiR1z6SLDdZ7643O7Ylv/cpURIdwZYlkLaFFgEMxhxZgiRSJal4m0MboP9Ae+mph6Ao0Mteey7QU1CkQIEeeirQ05566LV7KDrDIYfD16IEzIf10e8xM7/vb6jZXC4/kZsArVFG2pEUHBBc6fGf//68OZHL53O5hZPRc6S5uu36H58G2MvfVwDWqpMMOxYh8rHDrb0qAbyu5kPMGkkp2MuvAfTaFd+pYw0G6MAyHTfqFF54Tqco9nChHsOWhRQAvpevUmxxoTXUv5HCA9oi9tf7yjTF5qE16A17bgpWuqfQvxlm7bB66l5UQuw04vSJPMuwE/0cNXpmCiaRFDqVawIWhidgHYL9ujLHsHKFOFVbtpWBXWeYQqwZeODqiH385AW7/uXNmy8Bflm6EcMep2PzDDOUSHAEW3NC7GVpgWFqz7GEVKHf7A5ZbHqVjtsim6xjPByhKrZ1FzUsQ4IL26gw7LVMJ2spgdWJSQEbEeyVfNPDoO4iRe+H621YXjN6FxLc/dGi/I/fFeRbbE41q+Ne6jZGsqJ644Ztp2eZ/mS9lm/HME1Nxe74GCmZfbtnoP2xbhtJ7C6Ljc4p8RcEyCtLuWyVvv3zz0pvhRjxl8Ce7t4o3fsbKr3NsHJ1HW0cWLbNuLBOu98p8GZu/50Y1ux0HBF7NafAPx8r7wbYJtr5AWv3YliGtftUQxYX6qTyVlHFMnC6hjzwVgjUzo4tVx/wyeq3u2HJtCpP3mNYN4Z1xcoimBSuXiY23hrmq5cdr0rvh9ihV9Hp2ENRkcgkmPFlSY9/y48i+hZwCeyDACP1wo0lrS0nnMYWuReb/GHSKeES2Edxp9RYEvs4GBATHWPHTRN8qr8rrADJuLmW/dMATWCf+Ipkur26M9BNA5WHowF1KmBS+XECU2z8ExiyafA15PvqpwmMzFlSkVBEVEmuLLZQBr8j4vC0shoR1RTsqaeWa77TehXVnD4qD0ZdnY3b2nKYgrzOsGoF0SrALtNCIjWBNSJcpd/UCmzcWl3dwVq313HrpoG/iY2bJOem80AmS8au3cPPHL9ZwgOgSwG8JqabrjO6WIXGaIR8Dibo1xYXtBHunXex3RmbfXdVgq/gAPdMLCn0mWqQWoAq7ujjgSu1dFsfroKKScwStWPoLjb9ZwV3B9iGSWr24QJRNAkFNkg0HbYtoBHRm5M+Dcu7JTGBuk7dqEVQN+DIsof64JkfZbqv2nNsuqhiuv4znZM2tl0MeTYYQcTBWO3Dfk1dO63W1gvFbVRABdBakrQmqdXC9vYGHDTVtYNaq9KU9sc9A8O+DGRmzqgkQ9MlowMkmuEQG3CF2T/C7gvddM67g7FDZWweED3gsACHRTjcgCnGtaxLbMs6WX/n2KYbCWoXvBn1pB48gN0qNGJ2m8vN5KiQv7jsi/uL08imBmDCx6znox/CJikGQDdcdcfNxPIhppHtTxZ2xXc6ei4NU/cXDJti1uoEE2Mr+1drafJzil31nernUloKrEwBphmmxLCgmmf//ugLis34sVEht+1Ma7MMU2JY3No1PwWCieMWT2GOWaOYOG7LsQG5zqy1Yim0Y9gNhtG9j4iFex+GzTOn3hapZTnpTl/+cYFZM+pSxGmoNMzaIrNm1MXxSGJLDDsejiTShcZ+qrwtsOF9/aebccxbJwnsVojVTRObGdZux7F0a3cotggntF2lLCRr6Ref0RRy+ZkJMiA1lL5xoNgEQ7oofdPwh9/+am8yQJqmOKwikmcIFQpUC/ewkjBBVyhCNjGBmKUgU8yKhokYmuaYSJAdR3LTM0ARV3fHjhALsN7CugANY4yfrUKbtAcioyfs5cZrCC2s970bbXzepTf0K9heBV/R6RoDb+PcMy/AFzPDV2t1kzQSLwBP1ITBaDFJFEWRiHWBnor05D1u0tMWPW3T0w497dLTngeve2fvO4UiaS2eo1BOmaPG/6epPF6V+CPeiC/iifihXqgP4kEtbJAO4nlhyYfp/CsXpHN00kYn5Yp3VchVLkCt1lKbDcmQu0Cu3idGHeQiiPoP1YrUGTs4HMtKF5/3pVPd7jlkZwTyFtQwSZXcY5C3Qd4BeRfkPeJh3XcBlfIRLVO5Y5OpdM+7hnVBpZg0QPrvBnYcQpPudtyQjntDbI1d4K947P2BfFPxrzJJmcYakBr5YhG0DdA2QdsCbZvpi4ZNErW3DAKfEtEJ0KqorSLZHpMsMH2q1lGb7LToojn5cfuAbms8WaxWzuhipOISrEq1dnhWPzo9qxw2tRp/arZqR6DtgLbr/WtfrVcFwnv0kPq+fOz4cgVP2kjrXZj6IBgB5AdXJ0oBWnfsGtalSZOm27agOQTqT5JeJ38FfzIO0RFq1UgDXqGi09DJnvBYd/qBIDpRQczlV4A2EuSviZQKnhARJRWZDBC5IKqJiOQDJFxpSTXxEfp5upUpMRbeEyLIVR5LMSuW6QARF3cUmQkQf8mnWJnliF8NSeRagETqJILM8XC3ssK9zocuqK0EcoNb2c6yMs+RnSxkgSO7WcgiR/aykKVwMaxnIDdjiyEFucWHrnyUYeV2gDA5SUPuBAgv+wRyN0CYCKVZeUtwRMszBXk7TLqQEe47ASJIWwx5N0AiP2pFkHs8XCaBKY7uB4iSiTwIwy1mhPueWGrp4Uo8o8yyf58jmdX4kCMbWcgjjmxmIR9wJLOOljmSWSQfcgnibSOOfCQi6VY+Tqw6uimNICs8lkgLEpFPBEToSyLymC8Gv1klY/k0QCJtLIKgAGGdLS2jVZ50pOuJyFocoX0uamWdZ5QpQQWOZEpQUXTEG2wE2UggXtMVkU0+LrQTpzraEso+fKuIINsBwlt4AtmJiQczFUF2hZmu81fSCLLHEX83kEQ+E8re/3knjnwuigdPKYJ8IYpHOvJlWPZZAv9ViGTJ4dfR3si2LVGklF+ZIAj9jUV43Ym86pRDRHjdibzHyCLCX3ciSCVEhNedSCxVIZZaW/VfdiLI/wCZPh1u",
+}
+
+
+def ensure_device_definitions():
+    os.makedirs(DEVICES_DIR, exist_ok=True)
+    for bin_name, b64_str in EMBEDDED_DEVICE_BINS.items():
+        bin_path = os.path.join(DEVICES_DIR, bin_name)
+        expected_size = 6764 if '7K' in bin_name else 6719
+        if not os.path.exists(bin_path) or os.path.getsize(bin_path) != expected_size:
+            try:
+                with open(bin_path, 'wb') as f:
+                    f.write(zlib.decompress(base64.b64decode(b64_str)))
+            except Exception:
+                pass
+
+
 def auto_setup_and_extract_libs():
     """
     Auto-detects if YASDI is installed on the system.
@@ -215,10 +234,12 @@ Driver0=yasdi_drv_serial
 
 [COM1]
 Device={port_device}
-DeviceFilesPath={DEVICES_DIR}
 Media=RS485
 Baudrate={FIXED_BAUDRATE}
 Protocol=SMANet
+
+[Misc]
+ChannelListDir={DEVICES_DIR}
 """
     with open(YASDI_CONF_PATH, "w") as f:
         f.write(conf_content)
@@ -383,15 +404,21 @@ def extract_key_metrics(chans, sn):
             for k, v in chans.items():
                 if k.lower() == a.lower():
                     return v["value"], v["numeric"]
-        return "N/A", 0.0
+        return "N/A", None
 
-    pac_str, _ = get_val(["Pac", "GridMs.TotW", "Spot.Pac", "Pac-Ist"])
-    vol_str, _ = get_val(["A.Ms.Vol", "GridMs.PhV.phsA", "Spot.Uac", "Upv-Ist", "Vac", "Uac"])
-    amp_str, _ = get_val(["A.Ms.Amp", "GridMs.A.phsA", "Spot.Iac", "Ipv", "Iac"])
-    pdc_str, _ = get_val(["A.Ms.Watt", "Pdc", "Spot.Pdc"])
+    pac_str, pac_num = get_val(["Pac", "GridMs.TotW", "Spot.Pac", "Pac-Ist"])
+    vol_str, vol_num = get_val(["Upv-Ist", "Upv-Soll", "A.Ms.Vol", "GridMs.PhV.phsA", "Spot.Uac", "Vac", "Uac"])
+    amp_str, amp_num = get_val(["Ipv", "Iac-Ist", "A.Ms.Amp", "GridMs.A.phsA", "Spot.Iac", "Iac"])
+    pdc_str, pdc_num = get_val(["A.Ms.Watt", "Pdc", "Spot.Pdc"])
+    if (pdc_str == "N/A" or pdc_str is None) and vol_num is not None and amp_num is not None:
+        try:
+            pdc_calc = float(vol_num) * float(amp_num)
+            pdc_str = f"{pdc_calc:.0f}" if pdc_calc > 0 else "0"
+        except Exception:
+            pass
     etot_str, etot_num = get_val(["E-Total", "Metering.TotWhOut", "Spot.ETotal", "Total-Energy", "E_Total", "ETotal"])
-    mode_str, _ = get_val(["Mode", "Status", "OperatingStt"])
-    error_str, _ = get_val(["Error", "Fehler"])
+    mode_str, _ = get_val(["Status", "Mode", "OperatingStt"])
+    error_str, _ = get_val(["Fehler", "Error"])
 
     etot_float = 0.0
     try:
@@ -513,23 +540,29 @@ def main():
         cb_holder = EVENT_CALLBACK_TYPE(event_callback)
         lib.yasdiMasterAddEventListener(cb_holder, 0)
 
+        ensure_device_definitions()
         print(f"[*] Starting device detection for {target_count} inverters (RS485 sync mode)...")
         start_time = time.time()
 
-        # Execute blocking detection exactly as yasdishell ('e' command)
-        # This guarantees that YASDI completes detection AND channel list synchronization!
-        lib.DoStartDeviceDetection(target_count, 1)
-
-        handles = (ctypes.c_uint32 * 50)()
-        cnt_api = lib.GetDeviceHandles(handles, 50)
-
+        max_passes = 4 if target_count > 5 else 1
         all_final_handles = []
-        for i in range(cnt_api):
-            if handles[i] not in all_final_handles:
-                all_final_handles.append(handles[i])
-        for h in event_detected_handles:
-            if h not in all_final_handles:
-                all_final_handles.append(h)
+
+        for pass_num in range(1, max_passes + 1):
+            if pass_num > 1:
+                print(f"[*] Rescan pass {pass_num}/{max_passes}: Searching for remaining inverters ({len(all_final_handles)}/{target_count} found)...")
+            lib.DoStartDeviceDetection(target_count, 1)
+
+            handles = (ctypes.c_uint32 * 50)()
+            cnt_api = lib.GetDeviceHandles(handles, 50)
+            for i in range(cnt_api):
+                if handles[i] not in all_final_handles:
+                    all_final_handles.append(handles[i])
+            for h in event_detected_handles:
+                if h not in all_final_handles:
+                    all_final_handles.append(h)
+
+            if len(all_final_handles) >= target_count:
+                break
 
         found_count = len(all_final_handles)
         elapsed = time.time() - start_time
